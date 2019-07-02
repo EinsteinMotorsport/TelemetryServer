@@ -1,0 +1,12 @@
+002~tmot~8 Bit unsigned~1.0~-40
+003~tmot2~8 Bit unsigned~1.0~-40
+004~tfuel~8 Bit unsigned~1.0~-40
+005~toil~8 Bit unsigned~1.0~-40
+006~toil2~8 Bit unsigned~1.0~-40
+007~texh~16 Bit unsigned~0.1~0
+008~tint~8 Bit unsigned~1.0~-40
+009~pbrake_f~16 Bit unsigned~0.005~0
+010~pbrake_r~16 Bit unsigned~0.005~0
+011~pclutch~16 Bit unsigned~0.005~0
+012~pfuel~8 Bit unsigned~0.05~0
+013~poil~8 Bit unsigned~0.05~0
