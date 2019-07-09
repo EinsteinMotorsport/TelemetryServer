@@ -1,6 +1,7 @@
 import datetime
 import threading
 import time
+import sys
 
 import numpy
 
@@ -12,7 +13,6 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
-from timeit import default_timer
 
 
 class ReceiveProtocol:
@@ -30,12 +30,10 @@ class ReceiveProtocol:
         self.indexErrorCounter = 0
         self.wrong_id_counter = 0
 
-        self.id_counter_dict = {} # speichert Anzahl Auftreten von grossen IDs
+        self.id_counter_dict = {}  # speichert Anzahl Auftreten von grossen IDs
 
         self.load_lookup_table_from_file()
         self.load_config_table_from_file()
-
-        self._new_list = 128 * [0]
 
         self.start_time = datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S")
 
@@ -168,7 +166,7 @@ class ReceiveProtocol:
 
                 self.que.put({0: int(var[1]), 1: self.convert_bytes_to_value_decimal(var[1], *tmp)})
 
-                temp[var[1]] = self.convert_bytes_to_value_decimal(var[1], *tmp)
+                # temp[var[1]] = self.convert_bytes_to_value_decimal(var[1], *tmp)
                 counter += int(int(var[0]) / 8)
 
 
@@ -196,9 +194,9 @@ class SendingClass():
         if ok:
             print('configuration ok')
             self.__configuration = data
-            self.send_message()
+            # self.send_message()
         else:
-            print('wrong configuration')
+            sys.exit('wrong configuration')
 
     def _build_configuration_message(self):
         """Funktion um aus dem Konfigurationsarray die zu sendende Nachricht zu erstellen"""
@@ -245,6 +243,7 @@ def server(que):
     """startet den Webserver und schickt die Wertpaare, welche in der Queue ankommen an den Webserver"""
     # Config
     port = 7777  # Websocket Port
+
     # timeInterval = 10  # Milliseconds
 
     class WSHandler(tornado.websocket.WebSocketHandler):
@@ -262,6 +261,7 @@ def server(que):
             while True:
                 data = que.get()
                 to_send_info = json.dumps(data)
+                # print(to_send_info)
                 self.write_message(to_send_info)
 
         def on_message(self, message):
