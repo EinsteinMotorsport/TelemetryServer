@@ -12,3 +12,11 @@
 5. in funkmodul_main_webserver.py in Zeile 9 bei "port" die Zahl anpassen
 6. Konsole öffnen und an Skriptpfad navigieren
 7. mit "python funkmodul_main_webserver.py" Skript starten
+
+### Versionsverlauf
+#### 1.0
+Release einer lauffähigen Version zum Empfangen und Verarbeiten der Daten
+#### 1.1
+Einige Bugs behoben
+#### 1.2
+Fehlende Datei hinzugefügt
