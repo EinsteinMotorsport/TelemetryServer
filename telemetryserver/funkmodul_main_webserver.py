@@ -1,12 +1,22 @@
 import serial
+import serial.tools.list_ports
 
 import AMB8826
 import data_protocol_class_webserver
 from multiprocessing import Process, SimpleQueue
 
 if __name__ == '__main__':
+
+    ports = list(serial.tools.list_ports.comports())
+
+    for port in ports:
+        if "" in port.hwid:
+            portinfo = str(port).split()
+            portnumber = portinfo[0]
+            print(portnumber)
+
     receiver = serial.Serial(  # initialisiert den Empfaender am COM-Port
-        port='COM8',
+        port=portnumber,
         baudrate=115200,
         parity=serial.PARITY_NONE,
         stopbits=serial.STOPBITS_ONE,

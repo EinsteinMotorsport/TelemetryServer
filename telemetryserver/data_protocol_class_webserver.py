@@ -98,6 +98,8 @@ class ReceiveProtocol:
             number = numpy.int8(number)
         elif self.conf_dict[number][0][0] == '16':
             number = numpy.int16(number)
+        elif self.conf_dict[number][0][0] == '32':
+            number = numpy.int32(number)
         return int(number)
 
     def convert_bytes_to_value_hex(self, *args):
