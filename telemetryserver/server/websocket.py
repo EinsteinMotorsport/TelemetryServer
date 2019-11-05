@@ -4,9 +4,14 @@ import tornado
 
 
 def server(que):
-    """startet den Webserver und schickt die Wertpaare, welche in der Queue ankommen an den Webserver"""
+    """
+    startet den Webserver und schickt die Wertpaare,
+    welche in der Queue ankommen an den Webserver
+    """
+
     # Config
-    port = 7777  # Websocket Port
+    # Websocket Port
+    port = 7777
 
     # timeInterval = 10  # Milliseconds
 
@@ -14,7 +19,6 @@ def server(que):
 
         # check_origin fixes an error 403 with Tornado
         # http://stackoverflow.com/questions/24851207/tornado-403-get-warning-when-opening-websocket
-
         def check_origin(self, origin):
             return True
 
