@@ -1,57 +1,134 @@
+import asyncio
 import json
 
 import tornado
 
+open_connections = []
 
-def server(que):
+
+class WebsocketHandler(tornado.websocket.WebSocketHandler):
     """
-    startet den Webserver und schickt die Wertpaare,
-    welche in der Queue ankommen an den Webserver
+    Handle communication to one TelemetryClient
+
+    For every new connection from the TelemetryClient to the server via
+    websocket a new instance of this class is created. By using an eventloop
+    tornado is able to maintain multiple connections in one thread,
+    asynchronously.
+    """
+    def check_origin(self, origin):
+        """
+        Check origin of websocket connection
+
+        Gets automatically called at time of establishing a new connection.
+
+        Usually this method restricts websocket connections across
+        different sites for security reasons. If this method is overwritten
+        to always return True, connections from different sources are possible.
+
+        Return:
+            Always True
+        """
+
+        return True
+
+    def open(self):
+        """
+        Handle new connection to TelemetryClient
+
+        Event handler that is called for every new connection.
+
+        Add every new websocket connection to a list as otherwise it wouldn't
+        be possible to access any of the connections.
+        """
+
+        if self not in open_connections:
+            open_connections.append(self)
+
+    def on_message(self, message):
+        """
+        Handle incoming messages
+
+        Event handler that is called for every incoming message.
+
+        Empty, but needs to be implemented as it would otherwise raise a
+        NotImplementedError.
+        """
+        pass
+
+    def on_close(self):
+        """
+        Properly close connection to TelemetryClient
+
+        Event handler that gets called when the connection is lost.
+
+        Remove the websocket connection from the list as there is no need
+        to access it anymore.
+        """
+
+        open_connections.remove(self)
+
+
+async def consume(data_source):
+    """
+    Continuously receive telemetry and send it to all connected clients
+
+    Asynchronously wait for telemetry data sent through a pipe and as soon
+    as data is received, transform it into json format and send it
+    asynchronously to all clients.
+
+    Args:
+        data_source (aioprocessing.Connection): One end of an asynchronously
+        usable pipe through which telemetry data is provided for the server.
     """
 
-    # Config
-    # Websocket Port
-    port = 7777
+    while True:
+        telemetry_data = await data_source.coro_recv()
 
-    # timeInterval = 10  # Milliseconds
+        # TODO: should the data be transformed to json here or should it
+        #   already be a json string?
+        telemetry_message = json.dumps(telemetry_data)
 
-    class WSHandler(tornado.websocket.WebSocketHandler):
+        # asynchronously send the message to all clients via websocket
+        asyncio.gather(*[
+            client.write_message(telemetry_message)
+            for client in open_connections
+        ])
 
-        # check_origin fixes an error 403 with Tornado
-        # http://stackoverflow.com/questions/24851207/tornado-403-get-warning-when-opening-websocket
-        def check_origin(self, origin):
-            return True
 
-        def open(self):
-            self.send_values()
+def start_server(data_source, server_port=7777):
+    """
+    Start webserver for websocket connections to client
 
-        def send_values(self):
-            while True:
-                data = que.get()
-                to_send_info = json.dumps(data)
-                # print(to_send_info)
-                self.write_message(to_send_info)
+    Start asynchronous eventloop for tornado webserver and receiving data
+    through a Pipe.
 
-        def on_message(self, message):
-            pass
+    Args:
+        connection: One side of a pipe, should be a pipe that can be accessed
+            asynchronously.
 
-        def on_close(self):
-            pass
+        server_port (int): TCP port on which the server will run.
+            Defaults to 7777.
+    """
 
-        def InputData(self, InputListe):
-            SinputList = []
-            for line in InputListe:
-                # he call .decode('ascii') converts the raw bytes to a string.
-                # .split(',') splits the string on commas.
-                s = line.decode("utf-8").split(',')
-                SinputList.append(s)
-            return SinputList
+    print("Starting server...")
 
-    print("Server wird gestartet")
+    # New web application that provides Websocket connections via
+    # WebsocketHandler class, that is available at the '/service' path
+    # of the server
     application = tornado.web.Application([
-        (r'/service', WSHandler),
+        (r'/service', WebsocketHandler),
     ])
 
+    # start server that listens to websocket connections
     http_server = tornado.httpserver.HTTPServer(application)
-    http_server.listen(port)
-    tornado.ioloop.IOLoop.instance().start()
+    http_server.listen(server_port)
+
+    # start asyncio eventloop which is requried for tornado and for running
+    # the async consum function
+    # one could also use the tornado IOLoop, which is esentially the same as
+    # the asyncio eventloop, but for running other async functions as well,
+    # the tornado ioloop is not as suited.
+    loop = asyncio.get_event_loop()
+
+    # run the eventloop until consume stops, which does not happen
+    loop.run_until_complete(consume())
