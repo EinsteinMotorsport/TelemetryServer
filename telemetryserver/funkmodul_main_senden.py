@@ -1,6 +1,6 @@
 import serial
 
-import data_protocol_class_webserver
+from telemetryserver.data import data_protocol_class_webserver
 
 sender = serial.Serial(  # initialisiert den Empfaender am COM-Port
     port='COM5',

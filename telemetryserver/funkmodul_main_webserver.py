@@ -1,8 +1,8 @@
 import serial
 import serial.tools.list_ports
 
-import AMB8826
-import data_protocol_class_webserver
+from telemetryserver.transmission import AMB8826
+from telemetryserver.data import data_protocol_class_webserver
 from multiprocessing import Process, SimpleQueue
 
 if __name__ == '__main__':
