@@ -8,11 +8,11 @@ LOOK_UP_TABLE_PATH = 'Daten_verarbeiten_konfig_AL19.txt'
 CONFIG_TABLE_PATH = 'Daten_aufbereiten_konfig_AL19.txt'
 
 
-class ReceiveProtocol:
+class DataProcessing:
     """
     Process incoming data from car
     """
-    def __init__(self, queue):
+    def __init__(self):
 
         # hier werden die Zusammenstellungen der grossen ID's gespeichert
         # [ID] : [([Laenge, id), ...]
@@ -29,8 +29,6 @@ class ReceiveProtocol:
 
         self.start_time = datetime.datetime.now().strftime(
             "%Y_%m_%d__%H_%M_%S")
-
-        self.que = queue
 
         # self.start_id_counter_thread()
 
