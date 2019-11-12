@@ -14,11 +14,11 @@ if __name__ == "__main__":
     if port_identifier is None:
         raise IOError("Antenna is not connected!")
 
-    left_pipe_end, right_pipe_end = aioprocessing.Pipe()
+    left_pipe_end, right_pipe_end = aioprocessing.AioPipe()
 
     # Instanz von parallelen Prozess mit Webserver wird erstellt
-    p = aioprocessing.Process(target=dataproducer.communication,
-                              args=(port_identifier, left_pipe_end))
+    p = aioprocessing.AioProcess(target=dataproducer.communication,
+                                 args=(port_identifier, left_pipe_end))
 
     # Prozess wird gestartet
     p.start()

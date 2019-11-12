@@ -2,6 +2,7 @@ import asyncio
 import json
 
 import tornado
+import tornado.websocket
 
 open_connections = []
 
@@ -131,4 +132,4 @@ def start_server(data_source, server_port=7777):
     loop = asyncio.get_event_loop()
 
     # run the eventloop until consume stops, which does not happen
-    loop.run_until_complete(consume())
+    loop.run_until_complete(consume(data_source))
