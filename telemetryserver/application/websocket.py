@@ -32,7 +32,7 @@ class WebsocketHandler(tornado.websocket.WebSocketHandler):
 
         return True
 
-    def open(self):
+    async def open(self):
         """
         Handle new connection to TelemetryClient
 
