@@ -1,11 +1,12 @@
 import datetime
 import threading
 import time
+from importlib import resources
 
 import numpy
 
-LOOK_UP_TABLE_PATH = 'Daten_verarbeiten_konfig_AL19.txt'
-CONFIG_TABLE_PATH = 'Daten_aufbereiten_konfig_AL19.txt'
+LOOK_UP_FILE_NAME = 'Daten_verarbeiten_konfig_AL19.txt'
+CONFIG_FILE_NAME = 'Daten_aufbereiten_konfig_AL19.txt'
 
 
 class DataProcessing:
@@ -16,10 +17,10 @@ class DataProcessing:
 
         # hier werden die Zusammenstellungen der grossen ID's gespeichert
         # [ID] : [([Laenge, id), ...]
-        self.look_up_dict = self._load_lookup_table(LOOK_UP_TABLE_PATH)
+        self.look_up_dict = self._load_lookup_table(LOOK_UP_FILE_NAME)
         # [id] : [signed/unsigned], [Factor], [Offset]
         self.id_name_dict, self.conf_dict = self._load_config_table(
-            CONFIG_TABLE_PATH)
+            CONFIG_FILE_NAME)
 
         self.indexErrorCounter = 0
         self.wrong_id_counter = 0
@@ -55,12 +56,12 @@ class DataProcessing:
             return []
 
     @staticmethod
-    def _load_lookup_table(path: str):
+    def _load_lookup_table(file_name: str):
         """
         Load id lookup file
 
         Args:
-            path: path to config file containing id lookup
+            file_name: Name of file located in res subpackage
 
         Returns:
             dict: look_up_dict
@@ -68,7 +69,7 @@ class DataProcessing:
 
         look_up_dict = dict()
 
-        with open(path, 'r') as table:
+        with resources.open_text("telemetryserver.res", file_name) as table:
             for line in table:
                 tmp = line.strip().split('~')
                 look_up_dict[tmp[0]] = []
@@ -78,12 +79,12 @@ class DataProcessing:
         return look_up_dict
 
     @staticmethod
-    def _load_config_table(path: str):
+    def _load_config_table(file_name: str):
         """
         Load config file
 
         Args:
-            path: path to config file
+            file_name: Name of config file located in res subpackage
 
         Returns:
             Tuple[dict, dict]: id_name_dict, conf_dict
@@ -92,7 +93,7 @@ class DataProcessing:
         id_name_dict = dict()
         conf_dict = dict()
 
-        with open(path, 'r') as conf:
+        with resources.open_text("telemetryserver.res", file_name) as conf:
             for line in conf:
                 tmp = line.strip().split('~')
                 id_name_dict[tmp[0]] = tmp[1]
