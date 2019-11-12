@@ -1,22 +1,8 @@
-# Funkmodul How To Use
+# TelemetryServer
 
-### Voraussetzungen:
-- Phyton Version 3.6 (oder höher) muss installiert sein
-- python muss in PATH-Variable vorhanden sein
+## Requirements
+- Python version 3.7.0 or later
+- Python packages listed in requirements.txt need to be installed via pip
 
-### Vorgehensweise
-1. Gerätemanager öffnen
-2. "Anschlüsse (COM & LPT)" aufklappen
-3. Funkmodul in PC einstecken
-4. schauen, welcher COM bei Anschlüsse dazugekommen ist
-5. in funkmodul_main_webserver.py in Zeile 9 bei "port" die Zahl anpassen
-6. Konsole öffnen und an Skriptpfad navigieren
-7. mit "python funkmodul_main_webserver.py" Skript starten
-
-### Versionsverlauf
-#### 1.0
-Release einer lauffähigen Version zum Empfangen und Verarbeiten der Daten
-#### 1.1
-Einige Bugs behoben
-#### 1.2
-Fehlende Datei hinzugefügt
+## Run this package
+Execute `python -m telemetryserver` while radio antenna is plugged in.
