@@ -44,6 +44,7 @@ class WebsocketHandler(tornado.websocket.WebSocketHandler):
 
         if self not in open_connections:
             open_connections.append(self)
+            print("new_connection")
 
     def on_message(self, message):
         """
@@ -85,13 +86,9 @@ async def consume(data_source):
     while True:
         telemetry_data = await data_source.coro_recv()
 
-        # TODO: should the data be transformed to json here or should it
-        #   already be a json string?
-        telemetry_message = json.dumps(telemetry_data)
-
         # asynchronously send the message to all clients via websocket
         asyncio.gather(*[
-            client.write_message(telemetry_message)
+            client.write_message(telemetry_data)
             for client in open_connections
         ])
 
