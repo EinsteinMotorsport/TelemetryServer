@@ -1,22 +1,45 @@
-import sys
-
-from telemetryserver.transmission import AMB8826
-
-
 class SendingClass():
-    """Klasse um die Konfigurationsdatei an das Funkmodul zu schicken"""
-    def __init__(self, sender):
-        self.__configuration = [
+    """
+    Class for sending configuration to the car
+
+    To reduce data transmission not all telemetry variables are transmitted
+    from the car to the server. The configuration can be done with this class.
+    """
+    def __init__(self, car_connection):
+        """
+        Args:
+            car_connection: CarConnection object for data transmission
+        """
+
+        self._configuration = [
             [False, False, False, False, False, False, False, False],
             [False, False, False, False, False, False, False, False],
             [False, False, False, False, False, False, False, False],
             [False, False, False, False, False, False, False, False]
         ]
 
-        self.sender = sender
+        self._car_connection = car_connection
 
     def set_configuration(self, data):
         """Funktion um die Konfiguration zu ueberpruefen und zu laden"""
+        """
+        Set configuration
+
+        Check if configuration has the correct format and then set it in
+        preparation for transmission.
+
+        The correct format is: A list of 4 lists each containing 8 booleans.
+        Each boolean represents a CAN ID inside the car. If the boolean is true
+        all data of this CAN ID is sent to the server. The first boolean
+        represents the lowest CAN ID.
+
+        Args:
+            data: new configuration
+
+        Raises:
+            ValueError: If the passed configuration does not have the correct
+                format
+        """
 
         ok = True
         if len(data) != 4:
@@ -28,15 +51,17 @@ class SendingClass():
 
         if ok:
             print('configuration ok')
-            self.__configuration = data
+            self._configuration = data
             # self.send_message()
         else:
-            sys.exit('wrong configuration')
+            raise ValueError("Incorrect configuration")
 
     def _build_configuration_message(self):
         """
-        Funktion um aus dem Konfigurationsarray die zu sendende
-        Nachricht zu erstellen
+        Convert configuration transmittable package
+
+        To transmit the configuration it must be converted into a data package
+        that can be sent to the car.
         """
 
         start_signal = '02'
@@ -45,7 +70,7 @@ class SendingClass():
         uart_signal = 'DD'
         message = ''
         payload = ['', '', '', '']
-        for num, byte in enumerate(self.__configuration):
+        for num, byte in enumerate(self._configuration):
             for bit in byte:
                 if bit:
                     payload[num] += '1'
@@ -77,7 +102,9 @@ class SendingClass():
         return message
 
     def send_message(self):
-        """Sendet die Konfigurationsnachricht"""
+        """
+        Send configuration message to car
+        """
 
         data_to_send = self._build_configuration_message()
-        AMB8826.send_data(self.sender, data_to_send)
+        self._car_connection.send(data_to_send)
