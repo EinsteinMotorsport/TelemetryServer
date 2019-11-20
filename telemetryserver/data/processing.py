@@ -166,7 +166,7 @@ class DataProcessing:
         hex_value = ''
         for j, i in enumerate(args):
             tmp_hex = str(hex(i)).replace('0x', '')
-            if len(tmp_hex) == 1 and j > 0:
+            if len(tmp_hex) == 1:
                 tmp_hex = '0' + tmp_hex
             hex_value += tmp_hex
         return hex_value
@@ -180,7 +180,7 @@ class DataProcessing:
         hex_value = ''
         for j, i in enumerate(args):
             tmp_hex = str(hex(i)).replace('0x', '')
-            if len(tmp_hex) == 1 and j > 0:
+            if len(tmp_hex) == 1:
                 tmp_hex = '0' + tmp_hex
             hex_value = tmp_hex + hex_value
 
