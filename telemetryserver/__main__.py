@@ -2,7 +2,8 @@ import aioprocessing
 from serial.tools import list_ports
 from telemetryserver.application import dataproducer, websocket
 
-if __name__ == "__main__":
+
+def main():
     port_identifier = None
     for port in list_ports.comports():
         # Check for VendorID and ProductID in hardware id of antenna
@@ -16,11 +17,17 @@ if __name__ == "__main__":
 
     left_pipe_end, right_pipe_end = aioprocessing.AioPipe()
 
-    # Instanz von parallelen Prozess mit Webserver wird erstellt
+    # separate process that contains communication and data processing
+    # pass one end of the pipe so data can be sent to this process
     p = aioprocessing.AioProcess(target=dataproducer.communication,
                                  args=(port_identifier, left_pipe_end))
 
-    # Prozess wird gestartet
     p.start()
 
+    # pass other end of the pipe to the websocket server, to receive telemetry
+    # from the other process
     websocket.start_server(right_pipe_end)
+
+
+if __name__ == "__main__":
+    main()
