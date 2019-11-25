@@ -1,5 +1,4 @@
 import asyncio
-import json
 
 import tornado
 import tornado.websocket
