@@ -226,7 +226,7 @@ class DataProcessing:
             try:
                 pos_list = self.look_up_dict[big_id]
             except KeyError:
-                if big_id == '0':
+                if int(big_id) == 0:
                     break
                 else:
                     print('Wrong ID: ', big_id)
