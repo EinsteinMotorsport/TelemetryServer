@@ -1,0 +1,348 @@
+[can_id]
+0x10 = [ "tmot", "tmot2", "tfuel", "toil", "tecu_sys", "ub", "B_engon",]
+0x11 = [ "pbrake_f", "pbrake_r", "pclutch", "pfuel", "poil",]
+0x12 = [ "ath", "aps", "cutoff_gc_ems", "gear", "fan_pwm_ems",]
+0x13 = [ "fuelcons", "disttrip",]
+0x14 = [ "dam_fl", "dam_fr", "dam_rr", "dam_rl",]
+0x15 = [ "accy", "steer", "speed", "accx",]
+0x16 = [ "nmot", "lambda", "flc", "B_lsuop", "gear", "tmot",]
+0x17 = [ "nmot", "B_launchsw", "B_autoshiftsw", "B_clutch_open", "B_upshevent_ems", "mi_launch", "gear",]
+0x18 = [ "vwheel_fl", "vwheel_fr", "vwheel_rl", "vwheel_rr",]
+0x19 = [ "speed", "slip_act", "gc_state_ems", "mi_launch", "?????",]
+0x20 = [ "upshifterrcnt", "dnshifterrcnt", "shiftup_pwm_ems", "shiftdn_pwm_ems", "ugearp",]
+
+[telemetry_var.tmot]
+id = 2
+size = 8
+signed = false
+factor = 1.0
+offset = -40.0
+
+[telemetry_var.tmot2]
+id = 3
+size = 8
+signed = false
+factor = 1.0
+offset = -40.0
+
+[telemetry_var.tfuel]
+id = 4
+size = 8
+signed = false
+factor = 1.0
+offset = -40.0
+
+[telemetry_var.toil]
+id = 5
+size = 8
+signed = false
+factor = 1.0
+offset = -40.0
+
+[telemetry_var.tecu_sys]
+id = 6
+size = 8
+signed = false
+factor = 1.0
+offset = -40.0
+
+[telemetry_var.ub]
+id = 7
+size = 8
+signed = false
+factor = 0.001
+offset = 0.0
+
+[telemetry_var.B_engon]
+id = 8
+size = 8
+signed = false
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.pbrake_f]
+id = 9
+size = 16
+signed = false
+factor = 0.005
+offset = 0.0
+
+[telemetry_var.pbrake_r]
+id = 10
+size = 16
+signed = false
+factor = 0.005
+offset = 0.0
+
+[telemetry_var.pclutch]
+id = 11
+size = 16
+signed = false
+factor = 0.005
+offset = 0.0
+
+[telemetry_var.pfuel]
+id = 12
+size = 8
+signed = false
+factor = 0.05
+offset = 0.0
+
+[telemetry_var.poil]
+id = 13
+size = 8
+signed = false
+factor = 0.05
+offset = 0.0
+
+[telemetry_var.ath]
+id = 14
+size = 16
+signed = false
+factor = 0.01
+offset = 0.0
+
+[telemetry_var.aps]
+id = 15
+size = 16
+signed = false
+factor = 0.01
+offset = 0.0
+
+[telemetry_var.cutoff_gc_ems]
+id = 16
+size = 16
+signed = false
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.gear]
+id = 17
+size = 8
+signed = true
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.fan_pwm_ems]
+id = 18
+size = 8
+signed = true
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.fuelcons]
+id = 19
+size = 32
+signed = false
+factor = 0.01
+offset = 0.0
+
+[telemetry_var.disttrip]
+id = 20
+size = 32
+signed = false
+factor = 0.001
+offset = 0.0
+
+[telemetry_var.dam_fl]
+id = 21
+size = 16
+signed = true
+factor = 0.02
+offset = 0.0
+
+[telemetry_var.dam_fr]
+id = 22
+size = 16
+signed = true
+factor = 0.02
+offset = 0.0
+
+[telemetry_var.dam_rr]
+id = 23
+size = 16
+signed = true
+factor = 0.02
+offset = 0.0
+
+[telemetry_var.dam_rl]
+id = 24
+size = 16
+signed = true
+factor = 0.02
+offset = 0.0
+
+[telemetry_var.accy]
+id = 25
+size = 16
+signed = true
+factor = 0.001
+offset = 0.0
+
+[telemetry_var.steer]
+id = 26
+size = 16
+signed = true
+factor = 0.01
+offset = 0.0
+
+[telemetry_var.speed]
+id = 27
+size = 16
+signed = false
+factor = 0.01
+offset = 0.0
+
+[telemetry_var.accx]
+id = 28
+size = 16
+signed = true
+factor = 0.001
+offset = 0.0
+
+[telemetry_var.nmot]
+id = 29
+size = 16
+signed = false
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.lambda]
+id = 30
+size = 16
+signed = false
+factor = 0.01
+offset = 0.0
+
+[telemetry_var.flc]
+id = 31
+size = 8
+signed = false
+factor = 0.005
+offset = 72.0
+
+[telemetry_var.B_lsuop]
+id = 32
+size = 8
+signed = false
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.B_launchsw]
+id = 36
+size = 8
+signed = false
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.B_autoshiftsw]
+id = 37
+size = 8
+signed = false
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.B_clutch_open]
+id = 38
+size = 8
+signed = false
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.B_upshevent_ems]
+id = 39
+size = 8
+signed = true
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.mi_launch]
+id = 40
+size = 8
+signed = false
+factor = 0.5
+offset = 0.0
+
+[telemetry_var.vwheel_fl]
+id = 42
+size = 16
+signed = false
+factor = 0.01
+offset = 0.0
+
+[telemetry_var.vwheel_fr]
+id = 43
+size = 16
+signed = false
+factor = 0.01
+offset = 0.0
+
+[telemetry_var.vwheel_rl]
+id = 44
+size = 16
+signed = false
+factor = 0.01
+offset = 0.0
+
+[telemetry_var.vwheel_rr]
+id = 45
+size = 16
+signed = false
+factor = 0.01
+offset = 0.0
+
+[telemetry_var.slip_act]
+id = 47
+size = 16
+signed = true
+factor = 0.1
+offset = 0.0
+
+[telemetry_var.gc_state_ems]
+id = 48
+size = 8
+signed = false
+factor = 1.0
+offset = 0.0
+
+[telemetry_var."?????"]
+id = 50
+size = 8
+signed = false
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.upshifterrcnt]
+id = 51
+size = 16
+signed = false
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.dnshifterrcnt]
+id = 52
+size = 16
+signed = false
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.shiftup_pwm_ems]
+id = 53
+size = 8
+signed = true
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.shiftdn_pwm_ems]
+id = 54
+size = 8
+signed = true
+factor = 1.0
+offset = 0.0
+
+[telemetry_var.ugearp]
+id = 55
+size = 16
+signed = false
+factor = 0.001
+offset = 0.0
