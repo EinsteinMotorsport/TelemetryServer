@@ -15,6 +15,8 @@ def process_data(package, config):
 
     Args:
         package: package data received from the car
+        config (ConfigHandler): Instance of ConfigHandler that contains the
+            current config.
 
     Returns:
         list: list of all telemetry variables and their values in form of
@@ -167,10 +169,21 @@ def _get_payload_and_signal_strength(received_data):
 
 
 def generate_messages(data, config):
-    """iteriert durch empfangenes Daten-Paket und separiert IDs und Nutzdaten
-     -> schickt jede id mit Wert direkt an den Webserver"""
+    """
+    Parse package and generate messages with telemetry data
 
-    # TODO docstring
+    Parse the received package according to the configuration and generate a
+    list of messages with the processed values.
+
+    Args:
+        data (list): List of bytes from the data package
+        config (ConfigHandler): Instance of ConfigHandler which contains the
+            current config.
+
+    Returns:
+        list: List of messages. Each message contains the id of the variable
+            and the processed value.
+    """
 
     payload_data, signal_strength = _get_payload_and_signal_strength(data)
 
