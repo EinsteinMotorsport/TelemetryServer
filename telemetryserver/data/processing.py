@@ -1,6 +1,4 @@
-import datetime
-import threading
-import time
+from itertools import islice
 from typing import Sequence
 
 import numpy
@@ -27,42 +25,6 @@ def process_data(package, config):
         return generate_messages(package, config)
 
     return []
-
-
-def store_id_counter_dict(self):
-    """speichert id_counter_dict in eine Txt-Datei"""
-    # create_time = datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S")
-    # TODO refactor
-
-    raise DeprecationWarning
-
-    while True:
-        try:
-            with open('id_counter_dict__' + self.start_time + '.txt',
-                      'a') as counter_file:
-                print(datetime.datetime.now().strftime("%H_%M_%S"),
-                      '\t',
-                      self.id_counter_dict,
-                      file=counter_file)
-                time.sleep(5)
-
-        except FileNotFoundError:
-            with open('id_counter_dict__' + self.start_time + '.txt',
-                      'w') as o:
-                print("Auftritte der einzelnen ID's:", file=o)
-
-
-def start_id_counter_thread(self):
-    """
-    startet Thread, welcher das id_counter_dict
-    alle fuenf Sekunden in eine Datei schreibt
-    """
-    # TODO refactor
-    raise DeprecationWarning
-
-    store_counter_thread = threading.Thread(
-        target=self.store_id_counter_dict, )
-    store_counter_thread.start()
 
 
 def _convert_unsigned_to_signed(number: int, bitlength: int) -> int:
@@ -164,8 +126,31 @@ def _get_payload_and_signal_strength(received_data):
     """
 
     signal_strength = received_data[-2]
-    new_list = received_data[4:-2]
-    return new_list, signal_strength
+    payload = received_data[4:-2]
+    return payload, signal_strength
+
+
+def _payload_iterator(payload):
+    """
+    Iterate over the payload of a package
+
+    Iterator that iterates over a package by separating it into can messages.
+
+    Yields:
+        tuple: For each can message yields a tuple of length 2 that contains
+            a hex string of the can_id and an iterator of the bytes of the
+            can message.
+    """
+
+    payload_iter = iter(payload)
+
+    while True:
+        can_id, *can_message = tuple(islice(payload_iter, 9))
+
+        if len(can_message) != 8:
+            break
+
+        yield hex(can_id), iter(can_message)
 
 
 def generate_messages(data, config):
@@ -187,44 +172,28 @@ def generate_messages(data, config):
 
     payload_data, signal_strength = _get_payload_and_signal_strength(data)
 
-    counter: int = 0
     messages: list = []
 
-    while counter < len(payload_data):
-        can_id: str = hex(payload_data[counter])
-        counter += 1
+    for can_id, can_message in _payload_iterator(payload_data):
+        if can_id in config.can_ids:
+            telemetry_vars = config[can_id]
+        elif can_id == '0x0':
+            break
+        else:
+            print(f"Wrong ID: {can_id}")
 
-        # if can_id in self.id_counter_dict:
-        # self.id_counter_dict[can_id] += 1
-        # else:
-        # self.id_counter_dict[can_id] = 1
-
-        try:
-            telemetry_vars: list = config["can_id"][can_id]
-        except KeyError:
-            if can_id == '0x0':
-                break
-            else:
-                print('Wrong ID: ', can_id)
-                counter += 8
-                # self.wrong_id_counter += 1
-                continue
-
-        for variable in telemetry_vars:
-            var_config = config["telemetry_var"][variable]
+        for tel_var in telemetry_vars:
+            var_config = config[tel_var]
             size = var_config["size"]
 
-            var_data = payload_data[counter:counter + size // 8]
+            var_data = list(islice(can_message, size // 8))
 
             if len(var_data) != size // 8:
-                print("Index Error")
-                break
+                print("Error wrong tel_var size!")
 
             messages.append([
                 var_config["id"],
                 _apply_configuration_to_variable(var_config, var_data)
             ])
-
-            counter += size // 8
 
     return messages
